@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1894.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">const gameContainer = document.getElementById("game-container");</p>
+<p class="p1">const goal = document.getElementById("goal");</p>
+<p class="p1">const ball = document.getElementById("ball");</p>
+<p class="p1">const scoreElement = document.getElementById("score");</p>
+<p class="p2"><br></p>
+<p class="p1">let score = 0;</p>
+<p class="p1">let wind = 0;</p>
+<p class="p1">let interval;</p>
+<p class="p2"><br></p>
+<p class="p1">function randomWind() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>wind = Math.random() * 10 - 5;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function launchBall(event) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const rect = gameContainer.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const x = event.clientX - rect.left;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const y = event.clientY - rect.top;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const initialX = ball.offsetLeft;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const initialY = ball.offsetTop;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const distanceX = x - initialX;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const distanceY = y - initialY;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const speed = Math.sqrt(distanceX * distanceX + distanceY * distanceY) / 100;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let time = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>interval = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>time += 0.1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const newX = initialX + distanceX * time * speed;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const newY = initialY + distanceY * time * speed - wind * time * time;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (newX &lt; 0 || newX &gt; rect.width || newY &lt; 0 || newY &gt; rect.height) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>randomWind();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>ball.style.left = newX + "px";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ball.style.top = newY + "px";</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (ball.offsetLeft + ball.clientWidth &gt;= goal.offsetLeft &amp;&amp;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ball.offsetTop &gt;= goal.offsetTop - goal.clientHeight &amp;&amp;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ball.offsetTop &lt;= goal.offsetTop + goal.clientHeight) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>score++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scoreElement.textContent = "Skóre: " + score;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(interval);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>randomWind();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, 100);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">gameContainer.addEventListener("click", launchBall);</p>
+<p class="p1">randomWind();</p>
+</body>
+</html>
